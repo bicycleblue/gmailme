@@ -20,7 +20,7 @@ class GMailMe:
         logging.info(time.strftime("%a %d %b %Y"))
         logging.info("{} starting".format(sys.argv[0]))
 
-        self.parser = argparse.ArgumentParser(description="reboot notification",
+        self.parser = argparse.ArgumentParser(description="notify me",
                                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         self.parser.add_argument('-n', '--nope', action='store_true', help="nope, don't send email")
         self.parser.add_argument('-g', '--gmail_file', type=str, help="JSON file with gmail account info",

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import gmailme
+import sys
 import argparse
 import requests
 import time
@@ -134,17 +135,18 @@ class CoronaCheck(gmailme.GMailMe):
 
 
     def generate_message_body(self):
-        # check starting at 10:50 now, updates seem to be dropping at 10:45 - 11:00
         count = 0
-        while count < 8:
+        found = False
+        while count < 10:
             if self.todays_data_ready(json_total) and self.todays_data_ready(json_hospital):
                 self.logger.debug("todays data is ready, breaking the loop with count {}".format(count))
+                found = True
                 break
             self.logger.debug("todays data not ready, sleeping for 10 minutes")
             time.sleep(10 * 60)
             count += 1
 
-        if count >= 8:
+        if not found:
             self.logger.warning("failed to find new data, timed out with count {}".format(count))
             sys.exit(1)
 
