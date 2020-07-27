@@ -16,3 +16,21 @@ Then setup the gmail info file. I keep mine in $HOME/.gmail.json. That's hard-co
 }
 ```
 
+Lastly, setup any scripts you want run and when in the pi user's crontab.
+
+```
+$ crontab -e         # launches editor to modify pi's cron entries
+
+# every day near 11 check on COVID in MD stats
+50 10 * * * /home/pi/gmailme/coronacheck.py
+
+# Wed 4AM tell me how long I've been home
+0 4 * * 3 /home/pi/gmailme/workweek.py
+
+# every reboot, let me know
+@reboot /home/pi/gmailme/bootnotice.py
+```
+
+# writing new scripts
+Copy an existing one and modify. More docs should be here.
+
