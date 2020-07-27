@@ -47,5 +47,13 @@ $ gmailme.py -h
 * -g/--gmail_file lets you specify where to find the JSON file with gmail information as described above. Used to override the default location.
 
 # writing new scripts
-Copy an existing one and modify. More docs should be here.
+gmailme is written with Python 3, intended for running on my Raspberry Pi. It should work on other *nix systems without any problems.
+
+bootnotice.py is a very simple example of how to write a script using gmailme. It sends an email to me every time the Pi reboots. See the crontab example above for how to set it to run every time the device boots.
+
+All you have to do is create a class that inherits from GMailMe, put its name in the __init__ (it uses this name to name the logfile it generates). Then override generate_subject() and generate_message_body() to compute anything needed, fetch web files, etc, and fill in self.subject and self.message with the message information. Invoking the go() method causes it to do all the work to call those methods, do the logging, handle arguments, and send the email.
+
+If you look at the go() method you'll see it just calls a series of other methods to do all the right steps.
+
+In the coronacheck.py example script, in __init__, there is an example of how to add addtitional options to the script, beyond -n and -g. It adds -d/--days to let the user specify how many days of COVID data to pull from the Maryland stats.
 
