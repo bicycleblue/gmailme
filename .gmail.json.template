@@ -1,0 +1,6 @@
+{
+    "user": "rasp.pi.username",
+    "passwd": "gmail.application.key",
+    "to": "destination.user.name@gmail.com",
+    "from": "rasp.pi.username@gmail.com"
+}
