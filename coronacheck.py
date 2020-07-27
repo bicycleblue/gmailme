@@ -140,12 +140,13 @@ class CoronaCheck(gmailme.GMailMe):
             if self.todays_data_ready(json_total) and self.todays_data_ready(json_hospital):
                 self.logger.debug("todays data is ready, breaking the loop with count {}".format(count))
                 break
-            self.logger.debug("todays data not ready, sleeping for 5 minutes")
-            time.sleep(5 * 60)
+            self.logger.debug("todays data not ready, sleeping for 10 minutes")
+            time.sleep(10 * 60)
             count += 1
 
-        if count >= 10:
+        if count >= 8:
             self.logger.warning("failed to find new data, timed out with count {}".format(count))
+            sys.exit(1)
 
         self.get_data()
 
