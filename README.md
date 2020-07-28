@@ -1,12 +1,12 @@
 # gmailme
-Send an email via gmail and an application key.
+A Raspberry Pi (or other *nix computer) sends emails via its own gmail account.
 
-The idea is my Raspberry Pi is sitting idle most of the time, might as well have it kick off small jobs (from cron) to email me about things.
+It is all coded in a Python class that you can subclass and fill out some methods to send custom emails about whatever you're monitoring.
 
 # setup
-Check out the gmailme project, drop it on the Raspberry Pi. In my case I'm using the defauilt "pi" user, I put the code under pi's home directory.
+Check out this repo, drop it on the Raspberry Pi. In my case I'm using the defauilt "pi" user, I put the code under pi's home directory.
 
-Then setup the gmail info file. I keep mine in $HOME/.gmail.json. You can override that withe the -g/--gmail_file option.
+Then setup the gmail info file. I keep mine in $HOME/.gmail.json. You can override the location withe the -g/--gmail_file option.
 ```
 {
     "user": "rasp.pi.username",                   # my Pi has its own gmail account, put the username here
@@ -56,4 +56,12 @@ All you have to do is create a class that inherits from GMailMe, put its name in
 If you look at the go() method you'll see it just calls a series of other methods to do all the right steps.
 
 In the coronacheck.py example script, in __init__, there is an example of how to add addtitional options to the script, beyond -n and -g. It adds -d/--days to let the user specify how many days of COVID data to pull from the Maryland stats.
+
+# references
+A writeup on how to [send email with gmail and python](https://stackabuse.com/how-to-send-emails-with-gmail-using-python/)
+
+Some info on [gmail application passwords](https://support.google.com/mail/answer/185833).
+
+# todo
+Send fancier email, HTML formatted or what have you, with proper MIME header.
 
