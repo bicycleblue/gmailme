@@ -37,13 +37,13 @@ class CoronaCheck(gmailme.GMailMe):
     # assume if the last-modified includes today's date, the daily data is ready
     def todays_data_ready(self, url):
         resp = requests.head(url)
-
         last_modified = resp.headers['last-modified']
-        date_str = time.strftime("%d %b %Y")   # ex: "19 June 2020"
 
-        self.logger.debug("last-modified: {} date_str: {}".format(last_modified, date_str))
+        todays_date = time.strftime("%d %b %Y")   # ex: "19 June 2020"
 
-        if last_modified.find(date_str) > -1:
+        self.logger.debug("last-modified: {} todays_date: {}".format(last_modified, todays_date))
+
+        if last_modified.find(todays_date) > -1:
             self.logger.debug("found it, good to go")
             return(True)
 
@@ -135,6 +135,8 @@ class CoronaCheck(gmailme.GMailMe):
 
 
     def generate_message_body(self):
+        wait_times = [5, 5, 5, 15, 15, 30, 30, 60, 60, 60]  # sometimes they're late. check a few times fast, then throttle
+
         count = 0
         found = False
         while count < 10:
@@ -142,8 +144,8 @@ class CoronaCheck(gmailme.GMailMe):
                 self.logger.debug("todays data is ready, breaking the loop with count {}".format(count))
                 found = True
                 break
-            self.logger.debug("todays data not ready, sleeping for 10 minutes")
-            time.sleep(10 * 60)
+            self.logger.debug("todays data not ready, sleeping for {} minutes".format(wait_times[count]))
+            time.sleep(wait_times[count] * 60)
             count += 1
 
         if not found:
@@ -159,8 +161,5 @@ class CoronaCheck(gmailme.GMailMe):
 
 if __name__ == "__main__":
     cc = CoronaCheck()
-    cc.check_args()
-    cc.generate_subject()
-    cc.generate_message_body()
-    cc.send_message()
+    cc.go()
 
