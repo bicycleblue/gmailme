@@ -92,6 +92,8 @@ Some info on [gmail application passwords](https://support.google.com/mail/answe
 
 One set of examples on [how to write crontab entries](https://www.geeksforgeeks.org/crontab-in-linux-with-examples/)
 
+Github docs on [README.md formatting](https://docs.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax), because I'm still learning that bit.
+
 # todo
 Send fancier email, HTML formatted or what have you, with proper MIME header.
 
