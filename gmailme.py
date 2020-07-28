@@ -22,8 +22,10 @@ class GMailMe:
 
         self.parser = argparse.ArgumentParser(description="notify me",
                                               formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        self.parser.add_argument('-n', '--nope', action='store_true', help="nope, don't send email")
-        self.parser.add_argument('-g', '--gmail_file', type=str, help="JSON file with gmail account info",
+        self.parser.add_argument('-n', '--nope', action='store_true',
+                                 help="test, do everything but don't send email")
+        self.parser.add_argument('-g', '--gmail_file', type=str,
+                                 help="JSON file with gmail account info",
                                  default=os.path.expanduser("~/.gmail.json"))
 
 
@@ -44,11 +46,11 @@ class GMailMe:
 
 
     def generate_subject(self):
-        self.message = "default subject. override generate_subject()"
+        self.message = "default subject. override generate_subject() to customize"
 
 
     def generate_message(self):
-        self.message = "default message. override generate_message() to create your own"
+        self.message = "default message. override generate_message() to customize"
 
 
     def send_message(self):
