@@ -4,7 +4,7 @@ import gmailme
 import time
 
 
-class BootMessage(gmailme.GMailMe):
+class BootNotice(gmailme.GMailMe):
     def __init__(self):
         self.name = "bootnotice"
         super().__init__()
@@ -17,6 +17,6 @@ class BootMessage(gmailme.GMailMe):
 
 
 if __name__ == "__main__":
-    bm = BootMessage()
-    bm.go()
+    bn = BootNotice()
+    bn.go()
 
