@@ -54,11 +54,6 @@ class CoronaCheck(gmailme.GMailMe):
         resp = requests.get(json_total)
         data = json.loads(resp.text)
 
-        #print(pprint.pprint(data))
-
-        #for f in data['features']:
-        #    print(f['properties']['DATE'])
-
         prev = 0
         objid = 0
 
