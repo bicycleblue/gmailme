@@ -130,11 +130,11 @@ class CoronaCheck(gmailme.GMailMe):
 
 
     def generate_message_body(self):
-        wait_times = [5, 5, 5, 15, 15, 30, 30, 60, 60, 60]  # sometimes they're late. check a few times fast, then throttle
+        wait_times = [5, 5, 5, 15, 15, 30, 30, 60, 60, 60, 60, 120]  # sometimes they're late. check a few times fast, then throttle
 
         count = 0
         found = False
-        while count < 10:
+        while count < 12:
             if self.todays_data_ready(json_total) and self.todays_data_ready(json_hospital):
                 self.logger.debug("todays data is ready, breaking the loop with count {}".format(count))
                 found = True
@@ -144,7 +144,7 @@ class CoronaCheck(gmailme.GMailMe):
             count += 1
 
         if not found:
-            self.logger.warning("failed to find new data, timed out with count {}".format(count))
+            self.logger.warning("failed to find todays data, timed out after {} tries".format(count))
             sys.exit(1)
 
         self.get_data()
