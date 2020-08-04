@@ -46,7 +46,7 @@ class GMailMe:
 
 
     def generate_subject(self):
-        self.message = "default subject. override generate_subject() to customize"
+        self.subject = "default subject. override generate_subject() to customize"
 
 
     def generate_message_body(self):
