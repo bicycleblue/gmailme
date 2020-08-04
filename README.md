@@ -1,12 +1,12 @@
 # gmailme
-During the great isolation of 2020 I wrote some code for a Raspberry Pi to monitor some COVID stats that I care about. It emails me those stats from its own gmail account. I then fleshed it out into a more generic project that lets me quickly script up other things to monitor and send me emails about.
+During the great isolation of 2020 I wrote some code for a Raspberry Pi to monitor some COVID stats that I care about. It emails me those stats through a gmail account I set up for it. I then fleshed it out into a more generic project that lets me quickly script up other things to monitor and send me emails about. It should work on most *nix systems.
 
 It is all coded in a Python class that you can subclass and fill out some methods to send custom emails about whatever you're monitoring.
 
 # setup
 Check out this repo, drop it on the Raspberry Pi. In my case I'm using the defauilt "pi" user, I put the code under pi's home directory.
 
-Then setup the gmail info file. Copy the file .gmail.json.template to $HOME/.gmail.json or wherever you feel is safe to keep it. Make sure to chmod it so others can't see it. If you use an alternate location you can use the -g/--gmail_file option to identify it.
+Then setup the gmail info file. Copy the file .gmail.json.template to $HOME/.gmail.json or wherever you feel is safe to keep it. Make sure to chmod it so only the account you're using can see it. If you use an alternate location you can use the -g/--gmail_file option to identify it.
 ```
 {
     "user": "rasp.pi.username",                   # my Pi has its own gmail account, put the username here
@@ -24,7 +24,7 @@ $ crontab -e         # launches editor to modify pi's cron entries
 # every day near 11am check on COVID in MD stats
 50 10 * * * /home/pi/gmailme/coronacheck.py
 
-# Wed 4am tell me how long I've been home
+# Wed 4am tell me how long I've been working from home
 0 4 * * 3 /home/pi/gmailme/workweek.py
 
 # every reboot, let me know
