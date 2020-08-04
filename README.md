@@ -85,7 +85,7 @@ The important steps are:
 
 In the coronacheck.py example script, in __init__, there is an example of how to add addtitional options to the script, beyond -n and -g. It adds -d/--days to let the user specify how many days of COVID data to pull from the Maryland stats.
 
-When run from the commandline, the script will log to a file <yourprojectname>.log. If run from cron it will log to your user's home directory with the same name.
+When run from the commandline, the script will log to a file \<yourprojectname\>.log. If run from cron it will log to your user's home directory with the same name.
 
 # references
 A writeup on how to [send email with gmail and python](https://stackabuse.com/how-to-send-emails-with-gmail-using-python/)
