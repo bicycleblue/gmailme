@@ -49,7 +49,7 @@ class GMailMe:
         self.message = "default subject. override generate_subject() to customize"
 
 
-    def generate_message(self):
+    def generate_message_body(self):
         self.message = "default message. override generate_message() to customize"
 
 
@@ -114,7 +114,8 @@ def main():
     print("testing class")
     gmailme = GMailMe()
     gmailme.check_args()
-    gmailme.generate_message()
+    gmailme.generate_subject()
+    gmailme.generate_message_body()
     gmailme.send_message()
 
 
