@@ -97,3 +97,5 @@ Github docs on [README.md formatting](https://docs.github.com/en/github/writing-
 # todo
 Send fancier email, HTML formatted or what have you, with proper MIME header.
 
+More error checking is probably needed all around.
+
