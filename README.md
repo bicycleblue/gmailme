@@ -6,7 +6,7 @@ It is all coded in a Python class that you can subclass and fill out some method
 # setup
 Check out this repo, drop it on the Raspberry Pi. In my case I'm using the defauilt "pi" user, I put the code under pi's home directory.
 
-Then setup the gmail info file. Copy the file .gmail.json.template to $HOME/.gmail.json or wherever you feel is safe to keep it. Make sure to chmod it so only the account you're using can see it. If you use an alternate location you can use the -g/--gmail_file option to identify it.
+Then setup the gmail info file. Copy the file .gmail.json.template to $HOME/.gmail.json or wherever you feel is safe to keep it. Make sure to chmod it so only the account you're using can see it. If you use an alternate location you can use the -g/--gmail_file option to identify it. Try not to check this file into github once it has your information.
 ```
 {
     "user": "rasp.pi.username",                   # my Pi has its own gmail account, put the username here
