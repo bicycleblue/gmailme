@@ -46,6 +46,8 @@ $ gmailme.py -h
 * -n/--nope is for development and testing. It tells the script to do all the work to create a message to send, but not to send the email.
 * -g/--gmail_file lets you specify where to find the JSON file with gmail information as described above.
 
+gmail drops a logfile with information in the current directory. If it detects it is being run by cron it will put it in the home directory of the user whose cron kicked it off. The logfiles will be named by self.name, set this in your subclass' __init__.
+
 # writing new scripts
 gmailme is written with Python 3, intended for running on my Raspberry Pi. It should probably work on other *nix systems without any problems as long as you have the approrpriate python modules installed.
 
