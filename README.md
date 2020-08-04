@@ -101,3 +101,4 @@ Send fancier email, HTML formatted or what have you, with proper MIME header.
 
 More error checking is probably needed all around.
 
+Make where logs get dropped more configurable.
