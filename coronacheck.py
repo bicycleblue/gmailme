@@ -36,8 +36,18 @@ class CoronaCheck(gmailme.GMailMe):
 
     # assume if the last-modified includes today's date, the daily data is ready
     def todays_data_ready(self, url):
-        resp = requests.head(url)
-        last_modified = resp.headers['last-modified']
+        try:
+            resp = requests.head(url)
+            if resp.status_code != 200:    # getting some days where one of them just doesn't exist for a while
+                self.logger.debug("server returned non-200 OK status {}".format(resp.status_code))
+                return(False)
+            last_modified = resp.headers['last-modified']
+        except KeyError as e:
+            self.logger.debug("KeyError on last-modified header {}".format(str(e)))
+            return(False)
+        except:
+            self.logger.debug("error checking headers {}".format(str(e)))
+            return(False)
 
         todays_date = time.strftime("%d %b %Y")   # ex: "19 June 2020"
 
