@@ -18,10 +18,10 @@ Then setup the gmail info file. Copy the file .gmail.json.template to $HOME/.gma
 
 You can make the emails look a bit nicer if you add in the sender and recipient names in the to and from fields:
 
-'''
+```
     "to": "First Last <destination.user.name@gmail.com>",   # human name and email in angle brackets
     "from": "My Pi <rasp.pi.username@gmail.com>"            # and a cute name for your Pi or other system
-'''
+```
 
 Lastly, configure pi's crontab with times/dates and which scripts to run. The example scripts below are all included.
 
