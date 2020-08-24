@@ -46,7 +46,7 @@ class CoronaCheck(gmailme.GMailMe):
             self.logger.debug("KeyError on last-modified header {}".format(str(e)))
             return(False)
         except:
-            self.logger.debug("error checking headers {}".format(str(e)))
+            self.logger.debug("error checking headers")
             return(False)
 
         todays_date = time.strftime("%d %b %Y")   # ex: "19 June 2020"
