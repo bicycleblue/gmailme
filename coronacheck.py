@@ -88,7 +88,7 @@ class CoronaCheck(gmailme.GMailMe):
             count = f['properties']['Count_']
             delta = f['properties']['delta']
 
-            message += "{}: {} {}\n".format(date, count, delta)
+            message += "{}: {}\n".format(date, delta)
 
         return(message)
 
