@@ -19,6 +19,7 @@ class CoronaCheck(gmailme.GMailMe):
         super().__init__()
 
         self.parser.add_argument('-d', '--days', type=self.pos_int, help="how many days to display", default=7)
+        self.parser.add_argument('-f', '--force', action='store_true', help="ignore date on data, just do it", default=7)
 
 
     def pos_int(self, value):
@@ -72,7 +73,8 @@ class CoronaCheck(gmailme.GMailMe):
             count = p['Count_']
             objid = p['OBJECTID']
 
-            p['DATE'] = p['DATE'].split(' ')[0]
+            #p['DATE'] = p['DATE'].split(' ')[0]
+            p['DATE'] = p['DATE'].split('T')[0]
 
             if objid < 2:
                 p['delta'] = 0
@@ -105,7 +107,8 @@ class CoronaCheck(gmailme.GMailMe):
             count = p['Total']
             objid = p['OBJECTID']
 
-            p['DATE'] = p['DATE'].split(' ')[0]
+            #p['DATE'] = p['DATE'].split(' ')[0]
+            p['DATE'] = p['DATE'].split('T')[0]
 
             if count is None:
                 p['delta'] = 0
@@ -144,7 +147,11 @@ class CoronaCheck(gmailme.GMailMe):
 
         count = 0
         found = False
-        while count < 12:
+        if self.args.force:
+            self.logger.debug("force option enabled, accepting data without checking date")
+            found = True
+
+        while not found and count < 12:
             if self.todays_data_ready(json_total) and self.todays_data_ready(json_hospital):
                 self.logger.debug("todays data is ready, breaking the loop with count {}".format(count))
                 found = True
