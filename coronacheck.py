@@ -19,7 +19,7 @@ class CoronaCheck(gmailme.GMailMe):
         super().__init__()
 
         self.parser.add_argument('-d', '--days', type=self.pos_int, help="how many days to display", default=7)
-        self.parser.add_argument('-f', '--force', action='store_true', help="ignore date on data, just do it", default=7)
+        self.parser.add_argument('-f', '--force', action='store_true', help="ignore date on data, just do it", default=False)
 
 
     def pos_int(self, value):
