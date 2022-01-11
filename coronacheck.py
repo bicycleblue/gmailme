@@ -9,8 +9,21 @@ import logging
 import json
 
 
-json_total = "https://opendata.arcgis.com/datasets/18582de727934249b92c52542395a3bf_0.geojson"
-json_hospital = "https://opendata.arcgis.com/datasets/bf3f201b056b4c488b5dac3441b7ac20_0.geojson"
+# MDCOVID19 TotalCasesStatewide
+#json_total = "https://opendata.arcgis.com/datasets/18582de727934249b92c52542395a3bf_0.geojson"
+# MDCOVID19 TotalCurrentlyHospitalizedAcuteAndICU
+#json_hospital = "https://opendata.arcgis.com/datasets/bf3f201b056b4c488b5dac3441b7ac20_0.geojson"
+# from:
+# https://coronavirus.maryland.gov/datasets/
+# https://coronavirus.maryland.gov/search?collection=Dataset
+# click on the "I want to use this" at bottom left. then API Resources to find the JSON files
+
+stats = [{'json_url': "https://opendata.arcgis.com/datasets/18582de727934249b92c52542395a3bf_0.geojson",
+          'label': "Total Cases",
+          'field': "Count_"},
+         {'json_url': "https://opendata.arcgis.com/datasets/bf3f201b056b4c488b5dac3441b7ac20_0.geojson",
+          'label': "Hospitalizations",
+          'field': "Total"}]
 
 
 class CoronaCheck(gmailme.GMailMe):
@@ -32,14 +45,13 @@ class CoronaCheck(gmailme.GMailMe):
     def check_args(self):
         super().check_args()
 
-        print("days = {}".format(self.args.days))
-
 
     # assume if the last-modified includes today's date, the daily data is ready
+    # yea, that's a lot of weird errors to check for. this function has seen some...
     def todays_data_ready(self, url):
         try:
             resp = requests.head(url)
-            if resp.status_code != 200:    # getting some days where one of them just doesn't exist for a while
+            if resp.status_code != 200:    # seeing some days where one of them just doesn't exist for a while
                 self.logger.debug("server returned non-200 OK status {}".format(resp.status_code))
                 return(False)
             last_modified = resp.headers['last-modified']
@@ -61,81 +73,34 @@ class CoronaCheck(gmailme.GMailMe):
         return(False)
 
 
-    def get_total(self):
-        resp = requests.get(json_total)
+    def all_todays_data_ready(self):
+        for stat in stats:
+            if self.todays_data_ready(stat['json_url']):
+                return(True)
+
+        return(False)
+
+
+    def get_stat(self, stat):
+        resp = requests.get(stat['json_url']) # error checks? if head worked, get should.
         data = json.loads(resp.text)
 
         prev = 0
-        objid = 0
+        first = True
+        message = stat['label'] + "\n\n"
 
-        for f in data['features']:
+        for f in data['features'][-self.args.days-1:]:
             p = f['properties']
-            count = p['Count_']
-            objid = p['OBJECTID']
-
-            #p['DATE'] = p['DATE'].split(' ')[0]
-            p['DATE'] = p['DATE'].split('T')[0]
-
-            if objid < 2:
-                p['delta'] = 0
+            date = p['DATE'].split('T')[0]
+            value = p[stat['field']]
+            delta = value - prev
+            if first:
+                first = False
             else:
-                p['delta'] = count - prev
-
-            prev = count
-
-        message = ""
-
-        for f in data['features'][-self.args.days:]:
-            date = f['properties']['DATE']
-            count = f['properties']['Count_']
-            delta = f['properties']['delta']
-
-            message += "{}: {}\n".format(date, delta)
+                message += "{}: {} {}\n".format(date, value, delta)
+            prev = value
 
         return(message)
-
-
-    def get_hospital(self):
-        resp = requests.get(json_hospital)
-        data = json.loads(resp.text)
-
-        prev = 0
-        objid = 0
-
-        for f in data['features']:
-            p = f['properties']
-            count = p['Total']
-            objid = p['OBJECTID']
-
-            #p['DATE'] = p['DATE'].split(' ')[0]
-            p['DATE'] = p['DATE'].split('T')[0]
-
-            if count is None:
-                p['delta'] = 0
-                continue
-
-            if objid < 2:
-                p['delta'] = 0
-            else:
-                p['delta'] = count - prev
-
-            prev = count
-
-        message = ""
-
-        for f in data['features'][-self.args.days:]:
-            date = f['properties']['DATE']
-            count = f['properties']['Total']
-            delta = f['properties']['delta']
-
-            message += "{}: {} {}\n".format(date, count, delta)
-
-        return(message)
-
-
-    def get_data(self):
-        self.msg_total = self.get_total()
-        self.msg_hospital = self.get_hospital()
 
 
     def generate_subject(self):
@@ -151,8 +116,8 @@ class CoronaCheck(gmailme.GMailMe):
             self.logger.debug("force option enabled, accepting data without checking date")
             found = True
 
-        while not found and count < 12:
-            if self.todays_data_ready(json_total) and self.todays_data_ready(json_hospital):
+        while not found and count < len(wait_times):
+            if self.all_todays_data_ready():
                 self.logger.debug("todays data is ready, breaking the loop with count {}".format(count))
                 found = True
                 break
@@ -164,10 +129,12 @@ class CoronaCheck(gmailme.GMailMe):
             self.logger.warning("failed to find todays data, timed out after {} tries".format(count))
             sys.exit(1)
 
-        self.get_data()
+        self.message = ""
 
-        self.message = "Total Cases\n\n" + self.msg_total + "\n"
-        self.message += "Hospitalizations\n\n" + self.msg_hospital + "\n"
+        for stat in stats:
+            self.message += self.get_stat(stat)
+            self.message += "\n"
+
         self.message += "More Data: https://coronavirus.maryland.gov/\n"
 
 
